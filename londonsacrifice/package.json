@@ -1,0 +1,16 @@
+{
+  "name": "londonsacrifice-move-gallery",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:data && npm run test:league && npm run test:unit && npm run test:browser",
+    "test:data": "uv run --with python-chess python ../../scripts/chess/test_londonsacrifice_coach.py",
+    "test:league": "uv run --with python-chess python ../../scripts/chess/test_blunder_league.py",
+    "test:unit": "node --test tests/*.test.js",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "1.61.1"
+  }
+}

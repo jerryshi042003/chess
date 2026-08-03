@@ -1,0 +1,221 @@
+<!-- GENERATED from wisdom/chess-coach/src/index.template.html — edit there and run scripts/chess/sync_coach_ui.mjs -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>London · Chess Lessons</title>
+  <meta name="description" content="A clean, visual summary, drill, and review coach built from London’s public 3+0 games.">
+  <meta name="theme-color" content="#fffdf7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="londonsacrifice">
+  <link rel="manifest" href="/chess/londonsacrifice/manifest.webmanifest">
+  <link rel="icon" href="/chess/londonsacrifice/icons/chess-icon-192.png">
+  <link rel="apple-touch-icon" href="/chess/londonsacrifice/icons/chess-icon-180.png">
+  <link rel="stylesheet" href="/chess/londonsacrifice/vendor/chessground.base.css">
+  <link rel="stylesheet" href="/chess/londonsacrifice/vendor/chessground.brown.css">
+  <link rel="stylesheet" href="/chess/londonsacrifice/vendor/chessground.cburnett.css">
+  <link rel="stylesheet" href="/chess/londonsacrifice/ui/board.css">
+  <link rel="stylesheet" href="/chess/londonsacrifice/ui/navigation.css">
+  <link rel="stylesheet" href="/chess/londonsacrifice/ui/styles.css">
+</head>
+<body>
+  <main class="shell" id="app">
+    <header class="masthead">
+      <div class="masthead-id">
+        <p class="eyebrow" id="masthead-stats"></p>
+        <h1 id="app-heading"></h1>
+        <a class="profile-switch" id="profile-switch" href="#"></a>
+      </div>
+      <nav class="tabs" aria-label="Chess views">
+        <button type="button" data-view="summary" aria-pressed="true">Summary</button>
+        <button type="button" data-view="drill" aria-pressed="false">Drill</button>
+        <button type="button" data-view="review" aria-pressed="false">Review</button>
+        <a id="compare-tab" href="/chess/chess-league/">Compare</a>
+      </nav>
+    </header>
+    <p class="install-hint" id="install-hint" hidden><strong>Share&nbsp;<span aria-hidden="true">⎋</span> → Add to Home Screen</strong><span class="install-hint-why">Full screen, works offline.</span><button type="button" id="install-hint-close" aria-label="Dismiss install tip">×</button></p>
+
+    <section class="coach" id="coach" aria-label="Interactive chess lesson">
+      <div class="coach-chrome">
+        <div class="chip-row" id="coach-topbar" role="group" aria-label="Review mode" hidden></div>
+        <div class="chip-row" id="moves-filters" role="group" aria-label="Filter moves by classification" hidden></div>
+      </div>
+      <div class="experience">
+        <section class="position-heading" aria-live="polite">
+          <p id="position-meta" class="position-meta"></p>
+          <h2 id="position-title"></h2>
+          <p id="position-question" class="question"></p>
+        </section>
+
+        <div class="board-column">
+          <div class="board-frame"><div id="board" class="cg-wrap" role="img" aria-label="Chess position"></div></div>
+        </div>
+
+        <!-- The explanation sits DIRECTLY under the board, touching the question
+             it answers. The stepper is chrome and goes last: a control bar
+             wedged between a question and its answer breaks the sentence
+             (Jerry: "not connected to explanation bc separated by button"). -->
+        <aside class="lesson" id="lesson" aria-live="polite">
+          <p id="move-note" class="move-note" hidden></p>
+        </aside>
+
+        <div class="board-controls" role="group" aria-label="Step through this line">
+          <button id="step-prev" type="button" class="step-btn" aria-label="Previous move (left arrow key)">‹</button>
+          <p id="stage-label" class="stage-label">Ready</p>
+          <button id="step-next" type="button" class="step-btn step-btn-next" aria-label="Next move (right arrow key)">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="progress-view" id="progress-view" aria-label="Player summary" hidden>
+      <!-- The recurring read. Same questions every refresh, so an answer becomes
+           a trend rather than a headline. Practical means actionable: each line
+           is a fact about his own play with the sample it rests on. -->
+      <section class="read-card" id="read-card" aria-labelledby="read-title" hidden>
+        <p class="section-kicker">What your games say</p>
+        <h2 id="read-title" class="visually-hidden">Practical read</h2>
+        <div id="read-answers"></div>
+        <p class="section-sub" id="read-scope"></p>
+      </section>
+
+      <section class="latest-card" aria-labelledby="latest-title">
+        <p class="section-kicker">Newest games</p>
+        <h2 id="latest-title"></h2>
+        <p class="card-answer" id="latest-answer"></p>
+        <p class="section-sub" id="latest-sub"></p>
+        <button type="button" class="latest-review" id="latest-review">Review latest games →</button>
+      </section>
+
+      <section class="league-preview-card" aria-labelledby="league-preview-title">
+        <h2 id="league-preview-title" class="visually-hidden">Friends</h2>
+        <a class="league-preview-action" id="league-preview-action" href="/chess/chess-league/">Compare &amp; replay <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="opening-card" aria-labelledby="openings-title">
+        <p class="section-kicker">Openings</p>
+        <h2 id="openings-title">What London plays</h2>
+        <p class="section-sub" id="openings-scope"></p>
+        <p class="card-answer" id="openings-answer"></p>
+        <div class="opening-cols">
+          <div class="opening-col">
+            <h3>As White <em id="openings-white-n"></em></h3>
+            <div id="openings-white"></div>
+          </div>
+          <div class="opening-col">
+            <h3>As Black <em id="openings-black-n"></em></h3>
+            <div id="openings-black"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mistake-card" aria-labelledby="mistakes-title">
+        <p class="section-kicker">Mistakes</p>
+        <h2 id="mistakes-title">What loses games</h2>
+        <p class="card-answer" id="mistakes-answer"></p>
+        <div class="priority-list summary-mistakes" id="summary-mistakes"></div>
+        <div class="phase-strip" id="phase-strip"></div>
+      </section>
+
+      <details class="minor-cards" id="minor-cards">
+        <summary class="minor-summary">Trend &amp; rhythm <span class="minor-hint">— less important, tap to open</span></summary>
+      <section class="change-card" aria-labelledby="change-title">
+        <p class="section-kicker">Trend</p>
+        <h2 id="change-title"></h2>
+        <p class="card-answer" id="change-verdict" hidden></p>
+        <p class="section-sub" id="change-scope"></p>
+        <div class="change-table">
+          <div class="change-head" aria-hidden="true">
+            <span></span>
+            <span id="change-before-label"></span>
+            <span></span>
+            <span id="change-now-label"></span>
+          </div>
+          <div class="change-rows" id="change-rows"></div>
+        </div>
+        <div class="change-stable" id="change-answer"></div>
+      </section>
+
+      <section class="session-card" aria-labelledby="session-title">
+        <p class="section-kicker">Rhythm</p>
+        <h2 id="session-title">When in a sitting London wins</h2>
+        <p class="section-sub" id="session-scope"></p>
+        <div class="session-rows" id="session-rows"></div>
+        <p class="session-read" id="session-read"></p>
+      </section>
+      </details>
+    </section>
+
+    <section class="drill-view" id="drill-view" aria-label="Unlimited puzzle drill" hidden>
+      <section class="drill-head">
+        <p class="section-kicker">Drill</p>
+        <h2>Find the better move</h2>
+      </section>
+      <div class="drill-filters" id="drill-filters" role="group" aria-label="Filter puzzles by pattern"></div>
+      <p class="drill-scope" id="drill-scope" hidden></p>
+      <section class="drill-stage">
+        <p class="drill-gameline" id="drill-gameline"></p>
+        <div class="board-frame drill-frame"><div id="drill-board" class="cg-wrap" role="img" aria-label="Puzzle position"></div></div>
+        <div class="drill-clock" id="drill-clock" role="timer" aria-label="Time to find the move" hidden><span></span></div>
+        <div class="drill-ask">
+          <p class="drill-badge" id="drill-badge"></p>
+          <p class="drill-question" id="drill-question"></p>
+        </div>
+        <p class="drill-verdict" id="drill-verdict" role="status"></p>
+        <!-- Question → verdict → answer read as one block; the buttons come
+             after. Putting the action row between the ask and the explanation
+             is the crowding Jerry called out on the phone. -->
+        <div class="drill-answer" id="drill-answer" hidden>
+          <h3 id="drill-answer-title"></h3>
+          <p id="drill-answer-copy"></p>
+          <div class="source-links"><a id="drill-game-link" target="_blank" rel="noreferrer">Chess.com game ↗</a></div>
+        </div>
+        <div class="drill-actions">
+          <button id="drill-hint" type="button" class="drill-secondary">Hint</button>
+          <button id="drill-retry" type="button" class="drill-retry" hidden>Retry</button>
+          <button id="drill-next" type="button" class="primary-action">Skip →</button>
+        </div>
+      </section>
+      <p class="section-sub drill-stats" id="drill-stats"></p>
+      <p class="drill-weakspots" id="drill-weakspots" hidden></p>
+    </section>
+
+    <section class="review-games" id="review-games" aria-label="Every game, reviewable" hidden>
+      <p class="section-kicker">By game</p>
+      <h2>Every game, reviewable</h2>
+      <p class="section-sub" id="game-audit-count"></p>
+      <button type="button" class="review-filter-chip" id="review-filter-chip" hidden></button>
+      <div id="game-list" class="game-list"></div>
+    </section>
+
+    <section id="review-walker" class="review-walker" aria-label="Move-by-move game review" hidden>
+      <button id="review-back" type="button" class="review-back"><span aria-hidden="true">←</span> Back to games</button>
+      <p class="section-kicker">Game review</p>
+      <h2 id="review-title"></h2>
+      <p class="section-sub" id="review-scope"></p>
+      <div class="review-stage">
+        <div class="board-frame review-frame"><div id="review-board" class="cg-wrap" role="img" aria-label="Game position"></div></div>
+        <div class="review-side">
+          <div class="review-current" id="review-current" aria-live="polite"></div>
+          <button id="review-jump" type="button" class="review-jump" hidden></button>
+          <div class="review-controls">
+            <button id="review-prev" type="button" class="review-step" aria-label="Previous move"><span aria-hidden="true">‹</span></button>
+            <span id="review-progress" class="review-progress"></span>
+            <button id="review-next" type="button" class="review-step review-step-next" aria-label="Next move"><span aria-hidden="true">›</span></button>
+          </div>
+          <ol class="review-moves" id="review-moves"></ol>
+        </div>
+      </div>
+      <p class="review-note">Only your own moves are shown — these are your decision points, each graded against the engine. <a id="review-game-link" target="_blank" rel="noreferrer">Open the full game on Chess.com ↗</a></p>
+    </section>
+  </main>
+  <script src="/chess/chess-league/data.js?v=16"></script>
+  <script src="/chess/londonsacrifice/pwa.js"></script>
+  <script type="module" src="/chess/londonsacrifice/ui/main.js"></script>
+</body>
+</html>

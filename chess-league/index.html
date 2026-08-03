@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151411" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Time-control-matched blunder rates and the worst verified positions.">
+  <title>Blunder League</title>
+  <link rel="manifest" href="/chess/chess-league/manifest.webmanifest?v=16">
+  <link rel="apple-touch-icon" href="/chess/icons/chess-icon-180.png">
+  <link rel="stylesheet" href="/chess/vendor/chessground.base.css">
+  <link rel="stylesheet" href="/chess/vendor/chessground.brown.css">
+  <link rel="stylesheet" href="/chess/vendor/chessground.cburnett.css">
+  <link rel="stylesheet" href="/chess/ui/board.css">
+  <link rel="stylesheet" href="/chess/ui/navigation.css">
+  <link rel="stylesheet" href="/chess/chess-league/styles.css?v=16">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="masthead">
+        <h1>Blunder League</h1>
+        <time id="updated" aria-label="Analysis updated"></time>
+      </div>
+      <nav class="tabs" aria-label="Chess views">
+        <a data-coach-view="summary" href="/chess/#summary">Summary</a>
+        <a data-coach-view="drill" href="/chess/#drill">Drill</a>
+        <a data-coach-view="review" href="/chess/#review">Review</a>
+        <a href="/chess/chess-league/" aria-current="page">Compare</a>
+      </nav>
+      <nav class="coach-nav" aria-label="Open a player coach">
+        <a href="/chess/#summary">Jerry coach</a>
+        <a href="/chess/londonsacrifice/#summary">London coach</a>
+      </nav>
+    </header>
+
+    <section class="league-intro" aria-labelledby="league-verdict">
+      <p class="eyebrow">Friends · Blitz check-in</p>
+      <h2 id="league-verdict"></h2>
+      <p id="league-scope"></p>
+    </section>
+
+    <section aria-labelledby="metric-heading">
+      <div class="metric-lockup">
+        <div>
+          <p class="eyebrow">League table</p>
+          <h2 id="metric-heading" class="metric-heading">Blunders / 100 decisions</h2>
+        </div>
+        <span>Lower is better</span>
+      </div>
+      <p class="sr-only">Players are grouped by Chess.com speed. Select a player to reveal three engine-verified positions on this page.</p>
+      <div id="league"></div>
+    </section>
+    <p class="league-footnote" id="league-footnote"></p>
+  </main>
+  <script src="/chess/chess-league/data.js?v=16"></script>
+  <script type="module" src="/chess/chess-league/app.js?v=16"></script>
+  <script src="/chess/chess-league/pwa.js?v=16"></script>
+</body>
+</html>

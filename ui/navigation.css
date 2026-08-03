@@ -1,0 +1,43 @@
+/* GENERATED from wisdom/chess-coach/src/navigation.css — edit there and run scripts/chess/sync_coach_ui.mjs */
+/* One route language across every chess surface. Each app supplies the same
+   color tokens; this file owns geometry, interaction, and active state. */
+.tabs {
+  display: flex;
+  gap: 2px;
+  min-width: min(100%, 420px);
+}
+
+.tabs button,
+.tabs a {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+
+.tabs button[aria-pressed="true"],
+.tabs a[aria-current="page"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (hover: hover) {
+  .tabs button:hover:not([aria-pressed="true"]),
+  .tabs a:hover:not([aria-current="page"]) {
+    background: var(--control-bg);
+    color: var(--ink);
+  }
+}

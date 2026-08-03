@@ -1,0 +1,15 @@
+{
+  "name": "Blunder League",
+  "short_name": "Blunders",
+  "description": "The chess mistakes worth remembering, with one practical fix each.",
+  "id": "/chess/chess-league/",
+  "start_url": "/chess/chess-league/",
+  "scope": "/chess/chess-league/",
+  "display": "standalone",
+  "background_color": "#f7f4ec",
+  "theme_color": "#f7f4ec",
+  "icons": [
+    {"src": "/chess/icons/chess-icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/chess/icons/chess-icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "jerry-blitz-episode-coach",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:data && npm run test:unit && npm run test:browser",
+    "test:data": "uv run --with python-chess python ../../scripts/chess/test_episode_report.py",
+    "test:unit": "node --test tests/*.test.js",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.12.1"
+  }
+}

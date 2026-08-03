@@ -1,0 +1,2413 @@
+/* GENERATED from wisdom/chess-coach/src/styles.css — edit there and run scripts/chess/sync_coach_ui.mjs */
+:root {
+  color-scheme: light;
+  --canvas: #fffdf7;
+  --surface: #ffffff;
+  --ink: #171717;
+  --muted: #68635c;
+  --line: #d8d3ca;
+  --accent: #ff5a1f;
+  --accent-text: #b23c08; /* AA-safe accent for running text on the page ground */
+  --accent-ink: #241006;
+  --accent-soft: #ffe7dc;
+  --link: #9c300a;
+  --blue-soft: #e8eef4;
+  --blue: #345d7d;
+  --warn-soft: #f5ecd9;
+  --warn: #76551f;
+  --bad-soft: #f5e5e1;
+  --bad: #874338;
+  --control-bg: #f0ebe0;      /* tinted secondary fill (Uber's #F3F3F3, warmed) */
+  --control-bg-strong: #e7e1d3;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  min-width: 320px;
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+body {
+  margin: 0;
+  padding: max(10px, var(--safe-top)) max(12px, var(--safe-right)) max(24px, var(--safe-bottom)) max(12px, var(--safe-left));
+  font: 15px/1.42 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+select { font: inherit; }
+
+button { touch-action: manipulation; }
+
+button,
+select,
+a { -webkit-tap-highlight-color: transparent; }
+
+[hidden] { display: none !important; }
+
+button:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 48%, transparent);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p { margin-top: 0; }
+
+h1,
+h2,
+h3 {
+  line-height: 1.14;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(21px, 5.5vw, 28px);
+}
+
+h2 {
+  margin-bottom: 6px;
+  font-size: clamp(20px, 4.8vw, 25px);
+}
+
+h3 {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.shell {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px 18px;
+  padding: 2px 0 9px;
+  border-bottom: 1px solid var(--line);
+}
+
+.coach { padding-top: 10px; }
+
+.selectors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: min(100%, 720px);
+}
+
+html:not([data-coach="patterns"]) .selectors {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.selectors label { min-width: 0; }
+
+.selectors select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 34px 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.experience {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding-top: 10px;
+  min-width: 0;
+}
+
+/* One-screen coach on portrait phones: the board, step controls, and move rail
+   stay pinned; only the notes scroll, internally. The board is capped by the
+   available height so the notes always keep a usable minimum. */
+@media (max-width: 699px) {
+  html[data-standalone][data-coach] body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  html[data-coach] .shell {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  html[data-coach] .coach {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  html[data-coach] .experience {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden; /* clip rather than overlap if the board is tall */
+  }
+
+  html[data-coach] .position-heading,
+  html[data-coach] .board-column,
+  html[data-coach] .board-controls,
+  html[data-coach] #coach-topbar,
+  html[data-coach] #moves-filters { flex: 0 0 auto; }
+
+  /* One-screen chrome diet: the focused coach drops the stats eyebrow and
+     tightens the chip rows so board + controls + rail stay above the fold. */
+  html[data-coach] #masthead-stats { display: none; }
+  html[data-coach] .experience { padding-top: 4px; gap: 6px; }
+  html[data-coach] #coach-topbar,
+  html[data-coach] #moves-filters { margin: 6px 0 4px; padding-bottom: 0; }
+  html[data-coach] #coach-topbar button,
+  html[data-coach] #moves-filters button { min-height: 36px; padding: 5px 11px; }
+
+  /* The notes are the only scroller: move header, six-field insight, source
+     links and the scale explainer all scroll here while the board stays put. */
+  html[data-coach] .lesson {
+    flex: 1 1 auto;
+    min-height: 38px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  /* Board size comes from the ONE shared edge below (same as Drill). */
+}
+
+/* Desktop / large tablet: two columns — board left (capped, never full-width),
+   the heading, move rail, and notes stacked on the right. The page may scroll
+   normally here; the board is what must not balloon. */
+@media (min-width: 760px) and (min-height: 520px) {
+  html[data-coach] .experience {
+    display: grid;
+    grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+    grid-template-areas: "board heading" "controls lesson";
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 8px 26px;
+    align-items: start;
+  }
+
+  html[data-coach] .position-heading { grid-area: heading; }
+  html[data-coach] .board-column { grid-area: board; }
+  html[data-coach] .board-controls { grid-area: controls; }
+  html[data-coach] .lesson {
+    grid-area: lesson;
+    border-top: 0;
+    padding-top: 2px;
+  }
+
+  html[data-coach] .coach .board-frame { width: min(100%, 520px, 62vh); }
+}
+
+/* Desktop drill: board left, ask + actions right — no dead space, and the
+   prompt sits beside the board exactly like the coach layout. */
+@media (min-width: 900px) {
+  .drill-view .drill-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 520px) minmax(300px, 460px);
+    grid-template-areas: "board game" "board ask" "board verdict" "board answer" "board actions" "board spacer";
+    grid-template-rows: auto auto auto auto auto 1fr;
+    gap: 4px 30px;
+    align-items: start;
+    max-width: none;
+  }
+
+  /* One desktop board size across drill, coach, and walker. */
+  .drill-view .drill-frame { grid-area: board; width: min(100%, 520px, 62vh); }
+  .drill-view .drill-gameline { grid-area: game; margin: 0; }
+  .review-stage .review-frame { width: min(100%, 520px, 62vh); max-width: none; }
+  .drill-ask { grid-area: ask; margin-top: 0; }
+  .drill-verdict { grid-area: verdict; }
+  .drill-actions { grid-area: actions; }
+  .drill-answer { grid-area: answer; }
+}
+
+.position-heading {
+  grid-area: heading;
+  min-width: 0;
+  /* The one-line (nowrap+ellipsis) meta/question must never widen the page:
+     hidden overflow resets their min-content contribution up the flex chain. */
+  overflow: hidden;
+}
+
+.position-meta {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.position-facts {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.question {
+  margin-bottom: 0;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html[data-coach] .position-heading h2 { font-size: 17px; margin-bottom: 1px; }
+
+.board-column {
+  grid-area: board;
+  min-width: 0;
+}
+
+/* --- The chess.com board (see docs/ux-spec.md §1) -------------------------
+   One look for every board: green squares, coordinates inside the corner
+   squares, chess.com's measured state colors. The frame is a thin mat on
+   desktop and disappears (full-bleed) on phones. */
+.board-frame {
+  position: relative;
+  width: 100%;
+  align-self: start; /* in grid columns: hug the square board, don't stretch */
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+/* Board owns its square constraint via aspect-ratio. */
+.cg-wrap {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+/* Squares: #EBECD0 / #739552, drawn as a repeating 2×2 SVG checker. */
+.cg-wrap cg-board {
+  background-color: #ebecd0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='%23ebecd0'/chess/%3E%3Crect x='1' width='1' height='1' fill='%23739552'/chess/%3E%3Crect y='1' width='1' height='1' fill='%23739552'/chess/%3E%3C/svg%3E");
+  background-size: 25% 25%;
+}
+
+/* Selection + last move: chess.com yellow #FFFF33 at half opacity. */
+.cg-wrap cg-board square.selected,
+.cg-wrap cg-board square.last-move {
+  background-color: rgba(255, 255, 51, 0.5);
+}
+
+/* Legal-move dot: ≈⅓ of the square, rgba(0,0,0,.14) (their .hint element). */
+.cg-wrap cg-board square.move-dest {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.14) 23%, transparent 24%);
+}
+
+/* Capture ring: hollow circle at the square edge, same ink. */
+.cg-wrap cg-board square.oc.move-dest {
+  background: radial-gradient(circle closest-side, transparent 0 82%, rgba(0, 0, 0, 0.14) 83% 100%);
+}
+
+/* Desktop drag/hover: chess.com's white inset square outline, dot kept. */
+.cg-wrap cg-board square.move-dest:hover,
+.cg-wrap cg-board square.move-dest.hover {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.14) 23%, transparent 24%);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.65);
+}
+.cg-wrap cg-board square.oc.move-dest:hover,
+.cg-wrap cg-board square.oc.move-dest.hover {
+  background: radial-gradient(circle closest-side, transparent 0 82%, rgba(0, 0, 0, 0.14) 83% 100%);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.65);
+}
+
+/* Coordinates, chess.com convention: inside the squares, under the pieces,
+   colored like the opposite square. Our own overlay (see makeBoard). */
+.sq-coords {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* pieces are z-index 2 in chessground's base css */
+  pointer-events: none;
+  font-weight: 700;
+  font-size: clamp(10px, 2.6vw, 12px);
+  line-height: 1;
+  user-select: none;
+}
+.sqc { position: absolute; }
+.sqc-rank { left: 0; width: 12.5%; padding: 1.1% 0 0 1.1%; text-align: left; }
+.sqc-file { bottom: 0; width: 12.5%; padding: 0 1.1% 1% 0; text-align: right; }
+.sqc.on-light { color: #739552; }
+.sqc.on-dark { color: #ebecd0; }
+
+/* Phones: every board — drill, review coach, game walker — is the SAME size,
+   from one formula: full-bleed width, capped so the essentials above and
+   below it stay on screen even with the notch and home bar. */
+@media (max-width: 699px) {
+  :root {
+    /* Floor keeps short-landscape phones usable (they scroll); the cap keeps
+       tall portraits one-screen. */
+    --board-edge: min(100vw, max(252px, calc(100dvh - 298px - var(--safe-top) - var(--safe-bottom))));
+  }
+
+  .drill-stage .drill-frame,
+  .review-stage .review-frame,
+  html[data-coach] .coach .board-frame {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--board-edge);
+    max-width: none;
+    margin-inline: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+/* Step through the line: ‹ prev | stage | next › */
+.board-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.step-btn {
+  flex: 0 0 auto;
+  min-width: 54px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.step-btn:disabled { opacity: 0.38; cursor: default; }
+
+.step-btn-next { background: var(--control-bg-strong); }
+
+.stage-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.primary-action {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 9px 15px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* Lesson + the six-field insight panel */
+.lesson {
+  grid-area: lesson;
+  min-width: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.lesson p { overflow-wrap: anywhere; }
+
+.move-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.move-head h3 { margin: 0; font-size: 18px; }
+
+.class-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.step-caption { margin-bottom: 8px; }
+
+.insight {
+  margin: 6px 0 4px;
+  display: grid;
+  gap: 7px;
+}
+
+.insight-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 2px 12px;
+  align-items: baseline;
+}
+
+.insight-row dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.insight-row dd {
+  margin: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* Classification tones (light pastels, dark-mode overrides below) */
+.tone-brilliant { background: #cdeee6; color: #0c5a45; }
+.tone-great { background: #d6e4fb; color: #1c3f7a; }
+.tone-best { background: #d6f0da; color: #1a5c32; }
+.tone-good { background: #e4eed7; color: #41601f; }
+.tone-warn { background: #faedc4; color: #7c4d0c; }
+.tone-bad { background: #f7ddd9; color: #933024; }
+
+/* Scale explainer disclosure */
+.scale-explainer {
+  margin-top: 12px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+
+.scale-explainer > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--link);
+  font-weight: 500;
+}
+
+.scale-lead { font-size: 14px; margin-bottom: 9px; }
+
+.scale-rungs { display: grid; gap: 5px; margin-bottom: 9px; }
+
+.scale-rung {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 6px 10px;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.scale-name {
+  justify-self: start;
+  padding: 1px 9px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.scale-gloss { color: var(--muted); }
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 16px;
+  font-size: 13px;
+}
+
+#step-detail + #answer,
+#answer + .source-links,
+#step-detail:not([hidden]) + #answer[hidden] + .source-links {
+  margin-top: 9px;
+}
+
+.provenance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 13px;
+  margin-top: 13px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.progress-view {
+  width: min(100%, 760px);
+  padding-top: 16px;
+}
+
+.session-card h2 { margin-bottom: 8px; }
+
+.session-rows { display: grid; gap: 7px; }
+
+.session-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 86px;
+  gap: 10px;
+  align-items: center;
+}
+
+.session-label {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 400;
+}
+
+.session-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.session-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+  opacity: 0.45;
+}
+
+.session-row.high .session-bar i { opacity: 1; }
+
+.session-row.low .session-bar i {
+  opacity: 1;
+  background: var(--ink);
+}
+
+.session-value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.session-value em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.session-read {
+  max-width: 64ch;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.masthead-id {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  min-width: 0;
+}
+
+.masthead-id .eyebrow { width: 100%; }
+
+.profile-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.profile-switch:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+
+
+.opening-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px 26px;
+  width: min(100%, 720px);
+}
+
+.opening-col h3 {
+  margin: 8px 0 6px;
+  font-size: 15px;
+}
+
+.opening-col h3 em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.opening-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+
+.opening-rank {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.opening-copy strong {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.opening-copy em {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.opening-rest {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.progress-view > section + section {
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+/* The h2 joins the kicker as one quiet header line — the hero below is the
+   only loud element per card. */
+.progress-view > section h2 {
+  margin: 0 0 2px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.progress-view .section-sub { margin: 0 0 10px; font-size: 12.5px; }
+.progress-view .section-kicker { margin-bottom: 0; }
+
+.summary-mistakes { margin-bottom: 12px; }
+
+.phase-strip {
+  display: grid;
+  gap: 4px;
+  width: min(100%, 560px);
+  margin: 2px 0 10px;
+}
+
+.phase-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.phase-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.phase-bar i { display: block; height: 100%; }
+.phase-bar .phase-open { background: var(--accent); opacity: 0.45; }
+.phase-bar .phase-mid { background: var(--accent); }
+.phase-bar .phase-end { background: var(--ink); }
+
+.phase-legend {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 699px) {
+  .progress-view { padding-top: 0; }
+  .progress-view > section + section { margin-top: 24px; padding-top: 18px; }
+  .progress-view > section:first-of-type { margin-top: 8px; }
+}
+
+.latest-review {
+  min-height: 44px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent-text);
+  font-weight: 650;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.latest-review:hover { text-decoration: underline; }
+
+.league-preview-card {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 96% 0%, color-mix(in srgb, #7657c8 17%, transparent), transparent 42%),
+    color-mix(in srgb, var(--surface) 88%, var(--accent-soft));
+}
+
+.progress-view > .league-preview-card + section {
+  border-top: 0;
+}
+
+.league-preview-action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 15px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 13px;
+  font-weight: 720;
+  text-decoration: none;
+}
+
+.league-preview-action:hover { transform: translateY(-1px); }
+
+.phase-answer {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 420;
+}
+
+.phase-answer strong { color: var(--accent-text); }
+
+.section-kicker {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.section-sub {
+  margin: 2px 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 64ch;
+}
+
+.drill-view {
+  width: 100%;
+  padding-top: 7px;
+}
+
+.drill-head h2 { margin-bottom: 2px; }
+
+.drill-filters,
+.chip-row {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 10px;
+  padding-bottom: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.drill-filters::-webkit-scrollbar,
+.chip-row::-webkit-scrollbar { display: none; }
+
+/* Review's face + filter chips share ONE row on phones (competing rows was
+   the "can't focus" complaint); on wide screens they wrap naturally. */
+.coach-chrome { display: flex; flex-wrap: wrap; gap: 0 12px; align-items: center; }
+.coach-chrome .chip-row:not([hidden]) { display: contents; }
+@media (max-width: 699px) {
+  .coach-chrome {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0 6px;
+    padding: 6px 0 4px;
+  }
+  .coach-chrome::-webkit-scrollbar { display: none; }
+  .coach-chrome button { flex: 0 0 auto; }
+}
+
+.drill-filters button,
+.chip-row button {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 7px 13px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Selection is a neutral tint — the accent belongs to the primary action. */
+.drill-filters button[aria-pressed="true"],
+.chip-row button[aria-pressed="true"] {
+  background: var(--control-bg-strong);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Drill controls: ONE row — a segmented pair (which set) + a native picker
+   (how to narrow it). The pair's active side is the row's only strong fill. */
+.drill-filters { flex-wrap: nowrap; align-items: stretch; }
+
+.drill-seg {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 3px;
+  gap: 3px;
+  border-radius: 10px;
+  background: var(--control-bg);
+}
+
+.drill-seg button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 560px) {
+  .drill-seg .seg-count { display: none; } /* counts live in the picker */
+}
+
+.drill-seg button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(23, 20, 14, 0.12);
+}
+
+.drill-pick {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  /* A select sizes to its LONGEST option — cap it so the segments keep room;
+     the closed control ellipsizes long selections. */
+  width: clamp(104px, 32vw, 190px);
+}
+
+.drill-pick select {
+  width: 100%;
+  min-height: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 26px 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.drill-pick::after {
+  content: '▾';
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.chip-row button.chip[class*="tone-"][aria-pressed="false"] {
+  border-color: transparent;
+}
+
+.priority-list {
+  display: grid;
+  gap: 7px;
+  width: min(100%, 560px);
+  margin: 10px 0 14px;
+}
+
+.priority-row {
+  display: grid;
+  gap: 2px;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.priority-list .priority-row:last-child { border-bottom: 0; }
+
+/* The row itself drills the whole pattern; the chips under it drill one exact
+   mistake. Both are real buttons, so neither can be nested in the other. */
+.priority-main {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.priority-main:hover { background: var(--control-bg); }
+
+.priority-go {
+  flex: 0 0 auto;
+  color: var(--accent-text);
+  font-size: 11.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.priority-rank {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.priority-copy { min-width: 0; }
+
+.priority-copy strong {
+  display: block;
+  font-weight: 500;
+}
+
+.priority-bar {
+  display: block;
+  height: 6px;
+  margin: 4px 0 3px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.priority-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.priority-copy em {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* Every breakdown label is a query. Chips wrap (never a hidden side-scroller)
+   so no label can hide off-screen. */
+.sub-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px 40px;
+}
+
+.sub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+  padding: 7px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.sub-chip b {
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.sub-chip:hover {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  transform: translateY(-1px);
+}
+
+@media (max-width: 699px) {
+  .sub-chip-row { margin-left: 6px; }
+  .sub-chip { font-size: 12px; padding: 7px 10px; }
+}
+
+.drill-stage { max-width: 560px; }
+
+.drill-frame { width: min(100%, 480px); }
+
+/* The instruction card sits under the board (chess.com's "White to move"
+   position): the ask first, then what happened in the game, then the meta. */
+.drill-ask {
+  display: grid;
+  gap: 3px;
+  max-width: 64ch;
+  margin-top: 10px;
+}
+
+/* One line, three weights: a small caps kicker, the exact mistake in normal
+   case, then the count. All-caps across the whole string was the crowded run-on
+   Jerry saw at 390px. */
+.drill-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 7px;
+  margin: 0 0 2px;
+  font-size: 12.5px;
+}
+
+.drill-badge .badge-kicker {
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.drill-badge .badge-label { color: var(--ink); font-weight: 600; }
+
+.drill-badge .badge-count { color: var(--muted); font-weight: 500; }
+
+.drill-question {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 560;
+}
+
+/* One line above the board: which game, how deep into its story. The dot
+   holds one hue per game and changes when the game changes. */
+.drill-gameline {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.drill-gameline strong { color: var(--ink); font-weight: 600; }
+
+.drill-gameline.has-dot::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: oklch(0.62 0.11 var(--game-hue, 60));
+  vertical-align: 1px;
+}
+
+.drill-verdict {
+  min-height: 22px;
+  margin: 8px 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.drill-verdict.good { color: var(--accent); }
+
+.drill-verdict.bad { color: var(--muted); }
+
+.drill-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+
+.drill-secondary {
+  min-height: 44px;
+  padding: 8px 15px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--ink);
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.insight-more > summary {
+  cursor: pointer;
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 650;
+  padding: 4px 0;
+  list-style-position: inside;
+}
+
+.insight-more[open] > summary { margin-bottom: 2px; }
+
+.drill-secondary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* The ANSWER is each card's hero — large and light (lichess's "Rating:
+   3153.92" grammar), with weight and accent spent ONLY on the key term. */
+.card-answer {
+  margin: 4px 0 12px;
+  font-size: clamp(19px, 5vw, 24px);
+  font-weight: 380;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  max-width: 30ch;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.card-answer strong { color: var(--accent-text); font-weight: 680; }
+
+/* Retry, chess.com's wrong-move action: red-tinted, appears only on a miss. */
+.drill-retry {
+  min-height: 44px;
+  padding: 8px 15px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 119, 105, 0.16);
+  color: #b23a2d;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.drill-actions .primary-action { flex: 1 1 auto; }
+
+/* The recurring read. Restraint on purpose: this is the first thing on the page,
+   so it earns attention with the sentence, not with colour. One accent rule on
+   the left of a costly finding is the whole treatment. */
+.read-answer {
+  padding: 2px 0 10px 12px;
+  border-left: 2px solid var(--line);
+  margin-bottom: 10px;
+}
+
+.read-answer.is-cost { border-left-color: var(--accent); }
+
+.read-headline {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.read-act {
+  margin: 0 0 3px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.78;
+}
+
+.read-n {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ten days without a game is not an error, but the card must not imply the
+   numbers describe recent play. One weight change, no alarm colour. */
+.is-stale { color: var(--accent-text); font-weight: 600; }
+
+/* The finding's own practice, one tap away. A text link on the sample line —
+   the sentence is the content, this is just the door. */
+.read-drill {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Why a row has no practice. Quieter than the link it stands in for — it is a
+   statement of fact, not an invitation. */
+.read-nodrill { display: block; margin-top: 2px; color: var(--muted); font-style: italic; }
+
+.read-drill { display: block; margin-top: 2px; }
+
+.drill-stats { margin-top: 2px; }
+
+/* Speed mode's clock: one hairline that runs out. No digits, no colour until it
+   is gone — a number ticking down is pressure theatre, the bar is the fact. */
+.drill-clock {
+  height: 3px;
+  margin: 6px 0 2px;
+  border-radius: 2px;
+  background: var(--control-bg);
+  overflow: hidden;
+}
+
+.drill-clock > span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--ink);
+  transform-origin: left center;
+}
+
+.drill-clock.is-out > span { background: var(--accent); }
+
+.drill-stats-done { color: var(--accent-text); font-weight: 600; }
+
+/* Phone: the board leads — the section title is chrome, not content. */
+@media (max-width: 699px) {
+  .drill-head h2 { display: none; }
+  .drill-head { margin-bottom: 2px; }
+  .drill-stage { max-width: none; }
+}
+
+.drill-answer {
+  max-width: 64ch;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.drill-answer h3 {
+  margin-bottom: 4px;
+  font-size: 18px;
+}
+
+
+@media (hover: hover) {
+  .drill-filters button:hover:not([aria-pressed="true"]) { background: var(--control-bg); }
+  .drill-secondary:hover { background: var(--control-bg-strong); }
+  .drill-retry:hover { background: rgba(255, 119, 105, 0.24); }
+  .primary-action:hover { filter: brightness(0.96); }
+}
+
+@media (min-width: 761px) {
+  .experience {
+    grid-template-columns: minmax(360px, 620px) minmax(260px, 1fr);
+    grid-template-areas: "board heading" "board lesson";
+    gap: 10px clamp(20px, 4vw, 42px);
+  }
+
+  .position-heading { padding-top: 2px; }
+
+  .lesson {
+    min-height: 0;
+    padding: 3px 0 0 15px;
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+}
+
+@media (max-width: 480px) {
+  .masthead { align-items: stretch; }
+
+  .masthead h1,
+  .tabs { width: 100%; }
+
+  .tabs button,
+  .tabs a {
+    padding: 8px 2px;
+    font-size: 13px;
+  }
+}
+
+/* Drill and Review on phones: the identity masthead collapses into one
+   command bar — small title, ⇄ icon, tabs — so the content owns the screen.
+   Summary keeps the full masthead (it is the reading page). */
+@media (max-width: 699px) {
+  html[data-view="drill"] .masthead,
+  html[data-view="review"] .masthead {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0 6px;
+  }
+
+  html[data-view="drill"] .masthead-id,
+  html[data-view="review"] .masthead-id {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  html[data-view="drill"] #masthead-stats,
+  html[data-view="review"] #masthead-stats { display: none; }
+
+  html[data-view="drill"] #app-heading,
+  html[data-view="review"] #app-heading {
+    width: auto;
+    max-width: 32vw;
+    font-size: 14px;
+    font-weight: 650;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  html[data-view="drill"] .profile-switch,
+  html[data-view="review"] .profile-switch {
+    padding: 5px 7px;
+    font-size: 12px;
+  }
+
+  html[data-view="drill"] .profile-switch .switch-name,
+  html[data-view="review"] .profile-switch .switch-name {
+    display: none;
+  }
+
+  html[data-view="drill"] .tabs,
+  html[data-view="review"] .tabs {
+    width: auto;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  html[data-view="drill"] .tabs button,
+  html[data-view="drill"] .tabs a,
+  html[data-view="review"] .tabs button,
+  html[data-view="review"] .tabs a {
+    min-height: 38px;
+    padding: 6px 2px;
+    font-size: 12px;
+  }
+
+  /* Compact coach heading: meta line, then title + question flowing as one
+     sentence — no jargon block, no wasted rows. */
+  html[data-view="review"] .position-meta { font-size: 12px; margin-bottom: 1px; }
+  html[data-view="review"] .position-heading h2 {
+    display: inline;
+    margin-right: 7px;
+    font-size: 16px;
+  }
+  html[data-view="review"] .position-heading .question {
+    display: inline;
+    font-size: 14px;
+  }
+
+  /* Walker: back is a small chip beside the title, kicker goes. */
+  .review-walker .section-kicker { display: none; }
+  #review-back { min-height: 34px; padding: 5px 10px; font-size: 13px; }
+  .review-walker h2 { font-size: 17px; margin: 4px 0 2px; }
+  #review-scope { font-size: 12px; margin-bottom: 6px; }
+
+  /* Drill: the tab bar already says Drill — the section head is chrome. */
+  .drill-head { display: none; }
+  .drill-view { padding-top: 2px; }
+  .drill-filters { margin: 4px 0 8px; }
+  .drill-ask { margin-top: 8px; gap: 2px; }
+  .drill-question { font-size: 14.5px; }
+  .drill-verdict { min-height: 20px; margin: 6px 0 4px; font-size: 13.5px; }
+  .drill-actions { margin: 4px 0 10px; }
+
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 640px) {
+  .drill-head { display: none; }
+  .drill-view { padding-top: 2px; }
+  .drill-filters { margin: 4px 0 6px; }
+  .drill-filters button { min-height: 32px; padding: 4px 10px; font-size: 12px; }
+
+  .drill-view .drill-stage {
+    display: grid;
+    grid-template-columns: minmax(0, calc(100dvh - 176px)) minmax(240px, 1fr);
+    grid-template-areas: "board game" "board ask" "board verdict" "board answer" "board actions";
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    gap: 4px 18px;
+    align-items: start;
+    max-width: none;
+  }
+
+  .drill-view .drill-frame,
+  .review-stage .review-frame,
+  html[data-coach] .coach .board-frame {
+    grid-area: board;
+    width: min(100%, calc(100dvh - 176px));
+    left: auto;
+    transform: none;
+  }
+
+  .drill-view .drill-gameline { grid-area: game; margin: 0; }
+  .drill-view .drill-ask { grid-area: ask; margin-top: 0; }
+  .drill-view .drill-verdict { grid-area: verdict; }
+  .drill-view .drill-actions { grid-area: actions; margin: 2px 0 6px; flex-wrap: nowrap; }
+  .drill-view .drill-answer { grid-area: answer; overflow-y: auto; min-height: 0; }
+
+  /* One-screen landscape is locked by the visual spec: the board, rail, and
+     controls exactly fill the height. The class-chip row lives in portrait;
+     the rail falls back to pattern chips here (see railChips). The topbar
+     stays (back-to-puzzles / review faces) but compacts, and the stats
+     eyebrow goes. */
+  #moves-filters { display: none; }
+
+  #masthead-stats { display: none; }
+
+  #coach-topbar { margin: 2px 0; padding-bottom: 0; }
+
+  .coach { padding-top: 4px; }
+
+  #coach-topbar button {
+    min-height: 30px;
+    padding: 3px 10px;
+    font-size: 12px;
+  }
+
+  /* Same one-screen lock as portrait: the page never scrolls while the coach
+     is active; the notes column scrolls internally instead. */
+  html[data-standalone][data-coach] body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* The shell caps at the viewport in landscape either way — the lesson
+     scrolls internally; only the BODY lock is standalone-only. */
+  html[data-coach] .shell {
+    /* Viewport minus the body's own safe-area padding. */
+    height: calc(100dvh - max(6px, var(--safe-top)) - max(8px, var(--safe-bottom)));
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  html[data-coach] .coach {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  html[data-coach] .experience {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  html[data-coach] .lesson { min-height: 46px; }
+
+  body {
+    padding-top: max(6px, var(--safe-top));
+    padding-right: max(10px, var(--safe-right));
+    padding-bottom: max(8px, var(--safe-bottom));
+    padding-left: max(10px, var(--safe-left));
+  }
+
+  /* Short landscape (phones on their side): lock to the viewport and scroll
+     only the notes, like portrait — the tall six-field insight must not push
+     the page. */
+  html[data-standalone][data-coach] body { height: 100dvh; overflow: hidden; }
+  html[data-coach] .shell {
+    height: calc(100dvh - max(6px, var(--safe-top)) - max(8px, var(--safe-bottom)));
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  html[data-coach] .coach { flex: 1 1 auto; min-height: 0; }
+  html[data-coach] .experience { height: 100%; min-height: 0; }
+  html[data-coach] .lesson {
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .masthead {
+    flex-wrap: nowrap;
+    padding-bottom: 5px;
+  }
+
+  h1 { font-size: 20px; }
+
+  .tabs { min-width: 420px; }
+
+  .coach { padding-top: 6px; }
+
+  .selectors { width: min(100%, 660px); }
+
+  .experience {
+    display: grid;
+    grid-template-columns: minmax(0, calc(100dvh - 132px)) minmax(0, 1fr);
+    grid-template-areas: "board heading" "controls lesson";
+    grid-template-rows: auto 1fr;
+    gap: 5px 16px;
+    padding-top: 6px;
+  }
+
+  .position-heading { grid-area: heading; }
+  .lesson { grid-area: lesson; min-height: 0; overflow-y: auto; }
+
+  .board-column { grid-area: board; }
+  .board-controls { grid-area: controls; }
+
+  .board-frame {
+    width: min(100%, calc(100dvh - 176px));
+  }
+
+  /* Controls stay a compact horizontal row under the board — never a column
+     of giant bars (the round-8 landscape failure Jerry screenshotted). */
+  .board-controls { padding-top: 4px; }
+  .board-controls .step-btn { min-height: 38px; }
+
+  .primary-action {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .stage-label {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
+  .position-heading { padding-top: 0; }
+
+  .position-heading h2 {
+    margin-bottom: 4px;
+    font-size: 19px;
+  }
+
+  .question { font-size: 14px; }
+
+  .lesson {
+    padding: 8px 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .lesson h3 { font-size: 18px; }
+
+  #step-caption,
+  .answer-line,
+  .cue { margin-bottom: 6px; }
+
+  .provenance {
+    margin-top: 9px;
+    padding-top: 7px;
+  }
+
+  .progress-view {
+    width: 100%;
+    padding-top: 7px;
+  }
+
+  .progress-view h2 { font-size: 20px; }
+}
+
+.micro { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+
+.all-games > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px 12px;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.all-games > summary strong { font-weight: 500; }
+
+.all-games > summary span { color: var(--muted); font-size: 12px; }
+
+.game-list { max-width: 840px; border-top: 1px solid var(--line); }
+
+.game-row {
+  display: grid;
+  /* result badge · copy · Review button (auto — a fixed 30px track let the
+     68px button spill past the viewport at 390px) */
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.game-row p { margin-bottom: 3px; }
+
+.game-accuracy { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.game-result {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.game-result.win { background: var(--accent-soft); color: var(--accent); }
+
+.game-result.loss { background: var(--bad-soft); color: var(--bad); }
+
+.game-row > a { display: grid; place-items: center; min-width: 30px; min-height: 44px; }
+
+.drill-weakspots {
+  margin: 6px 0 0;
+  padding: 7px 11px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.drill-weakspots strong { font-weight: 700; }
+
+.weakspot-drill {
+  min-height: 28px;
+  padding: 1px 2px;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.weakspot-drill:hover { color: var(--accent); }
+
+.weakspot-hint { color: var(--muted); font-size: 12px; }
+
+.review-view { padding-top: 12px; }
+
+.review-back {
+  min-height: 40px;
+  margin-bottom: 8px;
+  padding: 6px 12px 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg);
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.review-back:hover { border-color: var(--accent); }
+
+.review-view h2 { margin-bottom: 2px; }
+
+.review-stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 12px; }
+
+.review-frame { max-width: 520px; }
+
+.review-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.review-current {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.review-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.review-jump {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--bad);
+  border-radius: 999px;
+  background: var(--bad-soft);
+  color: var(--bad);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.review-jump:hover { background: var(--bad); color: #fff; }
+
+.review-controls { display: flex; align-items: center; gap: 10px; }
+
+.review-step {
+  min-width: 46px; min-height: 44px;
+  border: 0; border-radius: 8px; background: var(--control-bg);
+  color: var(--ink); font-size: 18px; font-weight: 600;
+  cursor: pointer;
+}
+
+.review-step-next { background: var(--control-bg-strong); }
+
+.review-step:disabled { opacity: 0.35; }
+
+.review-step-next { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.review-progress { flex: 1; text-align: center; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.review-moves {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 4px;
+  max-height: 260px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.review-moves li {
+  display: flex; align-items: center; gap: 5px;
+  min-height: 34px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.review-moves li:hover { background: rgba(40, 91, 70, 0.06); }
+
+.review-moves li.active { background: var(--accent); color: #fff; }
+
+.review-moves li.active .rm-no, .review-moves li.active .rm-badge { color: #fff; }
+
+.review-moves .rm-no { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.review-moves .rm-san { flex: 1; font-weight: 600; }
+
+.review-moves li.tone-bad .rm-badge { color: var(--bad); font-weight: 800; }
+
+.review-moves li.tone-warn .rm-badge { color: var(--warn); font-weight: 800; }
+
+.review-moves li.tone-good .rm-badge { color: var(--muted); }
+
+.review-note { margin-top: 14px; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+
+.game-review-open {
+  border: 0;
+  background: transparent;
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.game-review-open:hover { text-decoration: underline; }
+
+.review-moves { max-height: 420px; }
+
+.change-table { width: min(100%, 600px); }
+
+.change-head,
+.change-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(42px, auto) 12px minmax(42px, auto);
+  gap: 8px;
+  align-items: center;
+}
+
+.change-head {
+  padding: 0 0 5px;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.change-rows { display: grid; }
+
+.change-row {
+  min-height: 62px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.change-copy { display: grid; gap: 4px; min-width: 0; }
+.change-label { overflow: hidden; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+
+.change-meta { display: flex; flex-wrap: wrap; gap: 5px 7px; align-items: center; color: var(--muted); font-size: 11.5px; }
+
+.change-state {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--control-bg);
+  font-size: 10.5px;
+  font-weight: 750;
+  letter-spacing: .02em;
+}
+
+.change-row.better .change-state { background: var(--accent-soft); color: var(--accent-text); }
+.change-row.worse .change-state { background: var(--bad-soft); color: var(--bad); }
+.change-row.flat .change-state { background: var(--control-bg); color: var(--muted); }
+
+.change-value {
+  color: var(--muted);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.change-arrow { color: var(--muted); font-size: 12px; text-align: center; }
+.change-now { color: var(--ink); font-weight: 720; }
+
+.change-stable {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 10px;
+  align-items: center;
+  width: min(100%, 600px);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.change-stable[hidden] { display: none; }
+.change-stable-label { color: var(--muted); font-size: 11px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
+.change-stable-list { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.change-stable-list > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 7px;
+  border-radius: 8px;
+  background: var(--control-bg);
+  font-size: 11.5px;
+}
+
+.change-stable-list b { color: var(--accent-text); font-size: 11px; }
+.change-empty { grid-column: 1 / -1; margin: 0; padding: 10px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+@media (max-width: 360px) {
+  .change-head,
+  .change-row { grid-template-columns: minmax(0, 1fr) 39px 10px 39px; gap: 5px; }
+  .change-row { min-height: 58px; }
+  .change-value { font-size: 14px; }
+}
+
+.change-card,
+.review-games { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+.review-games { margin-top: 0; padding-top: 12px; border-top: 0; }
+
+
+
+
+/* The study list always shows its full rows — it IS the why-list. */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #171512;
+    --surface: #22201c;
+    --ink: #f4f0e9;
+    --muted: #bdb6ab;
+    --line: #474139;
+    --accent: #ff7a45;
+    --accent-text: #ff9a66;
+    --control-bg: #2b2820;
+    --control-bg-strong: #383327;
+    --accent-ink: #221008;
+    --accent-soft: #4a2a1e;
+    --link: #ff9d75;
+    --blue-soft: #263541;
+    --blue: #94b7d1;
+    --warn-soft: #3b3324;
+    --warn: #dfbd78;
+    --bad-soft: #402b28;
+    --bad: #e49b8f;
+  }
+
+  .board-frame { border-color: #5b544a; }
+
+  /* Classification tones tuned for dark mode (muted fills, light ink) */
+  .tone-brilliant { background: #123c34; color: #8fe6cf; }
+  .tone-great { background: #16294a; color: #a9c7f5; }
+  .tone-best { background: #12331f; color: #92dca8; }
+  .tone-good { background: #263219; color: #c0d99a; }
+  .tone-warn { background: #3a2f12; color: #e6cf8a; }
+  .tone-bad { background: #3d201c; color: #f0a99e; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after { scroll-behavior: auto !important; }
+}
+
+
+/* --- Round 9: human-readable coaching components ------------------------- */
+
+
+/* Phase rows: what specifically goes wrong in each stage of the game — and,
+   like the pattern rows, every line of it is drillable. */
+.phase-row {
+  display: block;
+  padding: 2px 0;
+  border-top: 1px solid var(--line);
+}
+
+.phase-main {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 6px 6px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phase-main:hover { background: var(--control-bg); }
+.phase-main strong { color: var(--ink); font-weight: 600; }
+.phase-main em { font-style: normal; font-weight: 600; }
+.phase-row .sub-chip-row { margin-left: 0; }
+
+/* Openings are now doors into their games. */
+button.opening-row {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--line);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+}
+
+button.opening-row:hover { background: var(--control-bg); }
+
+.opening-gloss {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.opening-note {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.opening-note::before {
+  content: '\2192  ';
+  color: var(--accent-text);
+}
+
+.opening-go {
+  align-self: center;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Review-list filter chip (opening / last-7-days scopes). */
+.review-filter-chip {
+  margin: 0 0 10px;
+  padding: 6px 12px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control-bg-strong);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.review-filter-chip span[aria-hidden] { margin-left: 6px; color: var(--muted); }
+
+/* The one human sentence, always in frame. */
+.move-note {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.review-takeaway {
+  display: block;
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+/* iOS install hint: one dismissible line under the tabs. Sized as a full
+   row that can NEVER widen the masthead (the flex-basis:100% form overflowed
+   the nowrap landscape masthead — caught by the device-emulated gates). */
+/* Two clean lines, not three ragged flex columns: the action, then the why.
+   The old three-text-node flex row broke into a crowded 3-column block at
+   390px (Jerry: "the word and text is crowded"). */
+.install-hint {
+  position: relative;
+  display: block;
+  min-width: 0;
+  margin: 2px 0 10px;
+  padding: 7px 34px 7px 10px;
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.install-hint strong { display: block; }
+
+.install-hint-why { display: block; }
+
+/* The one-screen coach hides it (every pixel belongs to the board). */
+html[data-coach] .install-hint { display: none; }
+
+/* Landscape phones: every vertical pixel belongs to the board. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .install-hint { display: none; }
+}
+
+.install-hint strong { color: var(--ink); font-weight: 600; }
+
+.install-hint button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+/* App-feel polish: no tap flash, no accidental text selection or dbl-tap
+   zoom on controls, no rubber-band behind the one-screen views. */
+button, .tabs button, .tabs a, select {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button, .board-controls, .drill-actions, .review-controls, .tabs {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html[data-standalone] { overscroll-behavior-y: none; }
+
+/* Landscape phones: the review WALKER also goes two-column (board left,
+   facts right) — the stacked-giant-buttons layout is banned. */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 640px) {
+  .review-stage {
+    grid-template-columns: minmax(0, calc(100dvh - 150px)) minmax(240px, 1fr);
+    grid-template-areas: "board side";
+    gap: 6px 16px;
+    align-items: start;
+  }
+
+  .review-stage .review-frame { width: min(100%, calc(100dvh - 176px)); }
+
+  .review-stage .review-side { grid-area: side; gap: 6px; }
+
+  .review-walker { padding-top: 2px; }
+
+  .review-walker .section-kicker,
+  .review-walker h2 { display: inline-block; margin-right: 8px; }
+
+  .review-moves { max-height: 26vh; }
+}
+
+/* iOS resilience: never make a nested panel the only route to the bottom.
+   Safari's visual viewport changes as browser chrome and the home indicator
+   appear. A 100dvh body lock can therefore strand the answer or final action
+   outside the reachable region. The board still leads and remains above the
+   fold on an iPhone 13 Pro; the document itself owns vertical scrolling. */
+@media (max-width: 699px) {
+  html[data-standalone] { overscroll-behavior-y: contain; }
+
+  html[data-standalone][data-coach] body,
+  html[data-coach] .shell,
+  html[data-coach] .coach,
+  html[data-coach] .experience {
+    height: auto;
+    min-height: 0;
+  }
+
+  html[data-standalone][data-coach] body {
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  html[data-coach] .shell,
+  html[data-coach] .coach {
+    display: block;
+  }
+
+  html[data-coach] .experience {
+    display: flex;
+    overflow: visible;
+  }
+
+  html[data-coach] .lesson {
+    flex: none;
+    min-height: 0;
+    overflow: visible;
+    padding-bottom: max(72px, calc(48px + var(--safe-bottom)));
+  }
+
+  .drill-view,
+  .review-games,
+  .review-walker,
+  .progress-view {
+    padding-bottom: max(88px, calc(60px + var(--safe-bottom)));
+  }
+
+  .drill-answer {
+    max-height: none;
+    overflow: visible;
+  }
+
+  html[data-view="drill"] .tabs button,
+  html[data-view="drill"] .tabs a,
+  html[data-view="review"] .tabs button,
+  html[data-view="review"] .tabs a,
+  html[data-view="drill"] .profile-switch,
+  html[data-view="review"] .profile-switch,
+  .drill-filters button,
+  #review-back {
+    min-height: 44px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 640px) {
+  html[data-standalone][data-coach] body,
+  html[data-coach] .shell,
+  html[data-coach] .coach,
+  html[data-coach] .experience {
+    height: auto;
+    min-height: 0;
+  }
+
+  html[data-standalone][data-coach] body { overflow-y: auto; }
+  html[data-coach] .shell,
+  html[data-coach] .coach { display: block; }
+  html[data-coach] .experience { display: grid; overflow: visible; }
+  html[data-coach] .lesson,
+  .drill-view .drill-answer { max-height: none; overflow: visible; }
+}
+
+/* --- Round 10: every dashboard label is a one-tap drill query ------------- */
+
+/* The scope line under the Drill picker: exactly what is queued, and the way
+   out of it. Arriving from a nuance chip has to feel deliberate, not random. */
+.drill-scope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: min(100%, 560px);
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.drill-scope-copy { flex: 1 1 auto; min-width: 0; font-size: 12px; line-height: 1.35; }
+.drill-scope strong { color: var(--ink); }
+
+.drill-scope-clear {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.badge-family { color: var(--muted); font-weight: 500; }
+
+/* Openings: the family row plus its most repeated mistake as its own query. */
+.opening-row-group { display: grid; gap: 2px; }
+.opening-row-group .sub-chip-row { margin: 0 0 8px 30px; }
+
+/* Trend + rhythm: kept, but out of the way (Jerry: "the trend and the rhythm,
+   these two are not that important"). */
+.minor-cards {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.minor-summary {
+  min-height: 44px;
+  padding: 10px 2px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.minor-summary::-webkit-details-marker { display: none; }
+
+.minor-summary::before {
+  content: '\203A';
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.minor-cards[open] .minor-summary::before { transform: rotate(90deg); }
+.minor-hint { color: var(--muted); font-weight: 400; }
+.minor-cards > section { margin-top: 8px; }
+.minor-cards > section + section {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+/* The friends card is one link now, so it needs no chart chrome: the card IS
+   the button. */
+.league-preview-card {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.league-preview-card .league-preview-action {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: 0 16px;
+}
