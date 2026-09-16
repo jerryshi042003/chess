@@ -2,7 +2,7 @@
 
 Phone-first review and drills from Jerry's public Chess.com game history.
 
-**Live site:** https://jerryshi042003.github.io/chess/
+Personal project built around Jerry's game history. No public demo is currently available.
 
 The app turns real games into opening summaries, mistake-pattern drills, and
 move-by-move review. The shipped browser data is the same reviewed public data
@@ -17,6 +17,6 @@ runtime. The service worker is scoped to `/chess/` for GitHub Pages.
 
 ## Public boundary
 
-This standalone repo contains the deployable Chess product only. The broader
+This standalone repo contains the Chess project source only. The broader
 private research pipeline, raw account exports, and unrelated Wisdom content
 remain outside it.
