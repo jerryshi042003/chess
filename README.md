@@ -2,7 +2,9 @@
 
 Phone-first review and drills from Jerry's public Chess.com game history.
 
-Personal project built around Jerry's game history. No public demo is currently available.
+Personal project built around Jerry's game history. This standalone GitHub
+Pages mirror was retired; the personal coach continues within the separate
+Wisdom deployment.
 
 The app turns real games into opening summaries, mistake-pattern drills, and
 move-by-move review. The shipped browser data is the same reviewed public data
